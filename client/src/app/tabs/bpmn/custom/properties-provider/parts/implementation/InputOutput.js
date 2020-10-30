@@ -20,7 +20,11 @@ import cmdHelper from 'bpmn-js-properties-panel/lib/helper/CmdHelper';
 
 import { query as domQuery } from 'min-dom';
 
+import { is } from 'bpmn-js/lib/util/ModelUtil';
+
 import entryFieldDescription from 'bpmn-js-properties-panel/lib/factory/EntryFieldDescription';
+
+import entryFactory from 'bpmn-js-properties-panel/lib/factory/EntryFactory';
 
 import {
   areOutputParametersSupported,
@@ -33,6 +37,8 @@ import {
 } from '../../helper/InputOutputHelper';
 
 import InputOutputParameter from './InputOutputParameter';
+
+import OutputParameterToggle from './OutputParameterToggle';
 
 
 /**
@@ -62,12 +68,19 @@ export default function(element, bpmnFactory, translate, options = {}) {
   }
 
   // Heading ///////////////////////////////////////////////////////////////
-  const entry = getParametersHeading(element, bpmnFactory, {
+  const heading = getParametersHeadingEntry(element, bpmnFactory, {
     type: options.type,
     prop: options.prop,
     prefix: options.prefix
   });
-  entries.push(entry);
+  result.entries = result.entries.concat(heading);
+
+  // Toggle ///////////////////////////////////////////////////////////////////
+  const toggle = OutputParameterToggle(element, translate, {
+    prefix: options.prefix,
+    prop: options.prop
+  })
+  result.entries = result.entries.concat(toggle);
 
   // Parameters ///////////////////////////////////////////////////////////////
   result.entries = result.entries.concat(getIOMappingEntries(element, bpmnFactory, translate, {
@@ -89,7 +102,7 @@ export default function(element, bpmnFactory, translate, options = {}) {
  *
  * @returns {Object} An Object representing a properties-panel heading entry.
  */
-function getParametersHeading(element, bpmnFactory, options) {
+function getParametersHeadingEntry(element, bpmnFactory, options) {
   const entry = {
     id: `${options.prefix}-heading`,
     cssClasses: [ 'bpp-input-output' ],
@@ -173,6 +186,15 @@ function getParametersHeading(element, bpmnFactory, options) {
     const input = domQuery('input[type="hidden"]', entryNode);
     input.value = 1;
   }
+
+  /**
+   * Check whether propagateAllChildVariables attribute is set.
+   *
+   * @returns {boolean}
+   */
+  function isPropagateAllChildVariables() {
+    return true;
+  }
 }
 
 /**
@@ -204,7 +226,7 @@ function getIOMappingEntries(element, bpmnFactory, translate, options) {
 
   const parameters = params.map(function(param, index) {
 
-    return InputOutputParameter(param, bpmnFactory, translate,
+    return InputOutputParameter(param, translate,
       {
         idPrefix: `${options.prefix}-parameter-${index}`,
         onRemove: onRemove,

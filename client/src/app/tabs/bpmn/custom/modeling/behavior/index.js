@@ -9,10 +9,14 @@
  */
 
 import CreateZeebeBoundaryEventBehavior from './CreateZeebeBoundaryEventBehavior';
+import CreateZeebeCallActivityBehavior from './CreateZeebeCallActivityBehavior';
+
 
 export default {
   __init__: [
-    'createZeebeBoundaryEventBehavior'
+    'createZeebeBoundaryEventBehavior',
+    'createZeebeCallActivityBehavior'
   ],
-  createZeebeBoundaryEventBehavior: [ 'type', CreateZeebeBoundaryEventBehavior ]
+  createZeebeBoundaryEventBehavior: [ 'type', CreateZeebeBoundaryEventBehavior ],
+  createZeebeCallActivityBehavior: [ 'type', CreateZeebeCallActivityBehavior ]
 };

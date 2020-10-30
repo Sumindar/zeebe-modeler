@@ -18,7 +18,6 @@ import { query as domQuery } from 'min-dom';
 /**
  * Create an input or output mapping entry for a single input or output entry
  * @param {Object} parameter - BusinessObject for the respective paramter (can be 'zeebe:Input' or 'zeebe:Output')
- * @param {Object} bpmnFactory - bpmn-js bpmn-factory.
  * @param {Function} translate - translate function.
  * @param {Object} options - Options.
  * @param {string} [options.idPrefix] - preFix used to construct the 'id' of the GUI entries
@@ -30,7 +29,7 @@ import { query as domQuery } from 'min-dom';
  * each representing a properties-panel entry. First entry will always be a collapsible followed
  * by two inputs (one for source and one for target).
  */
-export default function(parameter, bpmnFactory, translate, options = {}) {
+export default function(parameter,  translate, options = {}) {
   const result = {},
         entries = result.entries = [];
 
